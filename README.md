@@ -14,7 +14,8 @@
 4. [Dataset Preparation](#dataset-preparation)
 5. [Configuration](#configuration)
 6. [Visualization](#visualization)
-7. [Citations](#citations)
+7. [Directory Structure](#directory-structure)
+8. [Citations](#citations)
 
 ## Source Code Access
 
@@ -131,6 +132,8 @@ if __name__ == "__main__":
     process_csv(input_csv)
 ```
 
+Download dataset from Kaggle: [Kaggle Dataset - Datetime OCR](https://www.kaggle.com/datasets/ivannalin/data-analysis-of-datetime-based-ocr-dataset)
+
 ## Configuration
 
 Place all YAML configuration files in `config_files/`:
@@ -140,7 +143,7 @@ Place all YAML configuration files in `config_files/`:
 
 ## Visualization
 
-Launch TensorBoard with:
+From the corresponding directory, launch TensorBoard with:
 
 ```bash
 tensorboard --logdir runs/
@@ -148,7 +151,8 @@ tensorboard --logdir runs/
 
 Access at: `http://localhost:6006`
 
-## Directory structure
+## Directory Structure
+
 ```bash
 project_root/
 │
@@ -191,6 +195,7 @@ project_root/
 └── runs/                       # TensorBoard logs (now top-level)
     ├── 20231019_GRU_<timestamp>/
 ```
+
 ## Citations
 
 This training script builds upon [JaidedAI/EasyOCR](https://github.com/JaidedAI/EasyOCR), which is modified based on:
@@ -204,4 +209,4 @@ This training script builds upon [JaidedAI/EasyOCR](https://github.com/JaidedAI/
 }
 ```
 
-For support contact: \[[ivannalyy@gmail.com](ivannalyy@gmail.com)]
+For support contact: [ivannalyy@gmail.com](mailto:ivannalyy@gmail.com)
