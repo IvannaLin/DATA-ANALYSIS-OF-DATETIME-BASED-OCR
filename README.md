@@ -18,8 +18,7 @@
 
 ## Source Code Access
 
-[GitHub Repository](https://github.com/yourusername/repository)
-*Note: Link remains valid for 1 year post-submission*
+[GitHub Repository]([https://github.com/yourusername/repository](https://github.com/IvannaLin/DATA-ANALYSIS-OF-DATETIME-BASED-OCR))
 
 ## Environment Setup
 
