@@ -18,7 +18,7 @@
 
 ## Source Code Access
 
-[GitHub Repository]([https://github.com/yourusername/repository](https://github.com/IvannaLin/DATA-ANALYSIS-OF-DATETIME-BASED-OCR))
+[GitHub Repository]([https://github.com/IvannaLin/DATA-ANALYSIS-OF-DATETIME-BASED-OCR])
 
 ## Environment Setup
 
