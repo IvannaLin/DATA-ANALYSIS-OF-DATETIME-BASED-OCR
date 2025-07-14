@@ -1,40 +1,10 @@
-# DATA ANALYSIS OF DATETIME BASED OCR
-
-## Table of Contents
-
-1. [Source Code Access](#source-code-access)
-2. [Environment Setup](#environment-setup)
-
-   * [PaddleOCR Execution](#paddleocr-execution-environment)
-   * [EasyOCR Training](#easyocr-training-environment)
-3. [Execution Instructions](#execution-instructions)
-
-   * [Running PaddleOCR](#running-paddleocr)
-   * [Training Custom Model](#training-custom-model)
-4. [Dataset Preparation](#dataset-preparation)
-5. [Configuration](#configuration)
-6. [Visualization](#visualization)
-7. [Directory Structure](#directory-structure)
-8. [Citations](#citations)
+# EASYOCR CUSTOM TRAINING ENVIRONMENT
 
 ## Source Code Access
 
 [GitHub Repository](https://github.com/IvannaLin/DATA-ANALYSIS-OF-DATETIME-BASED-OCR)
 
 ## Environment Setup
-
-### PaddleOCR Execution Environment
-
-```bash
-conda create -n paddleocr2 python=3.8 -y
-conda activate paddleocr2
-pip install paddlepaddle paddleocr
-python -c "import paddle; paddle.utils.run_check()"
-python -c "from paddleocr import PaddleOCR; ocr = PaddleOCR(); print('Success!')"
-ipython kernel install --user --name=paddleocr2 --display-name "Python 3.8 (PaddleOCR)"
-```
-
-### EasyOCR Training Environment
 
 ```bash
 # Clean existing env
@@ -71,28 +41,44 @@ pip install --upgrade intel-extension-for-tensorflow[xpu]
 python -c "import intel_extension_for_tensorflow as itex; print(itex.tools.python.env_check.check()); print(itex.__version__)"
 ```
 
-## Execution Instructions
+## Training Custom Model
 
-### Running PaddleOCR
+1. Place your dataset into `trainer/all_data`
 
-1. Modify `paddle.py` to specify your image directory:
-
-```python
-directories = [
-    r'C:\path\to\your\images'  # Change this to your image directory
-]
+```
+trainer/
+└── all_data/
+    ├── 20241025_train/
+    │   ├── img1.jpg
+    │   ├── ...
+    │   └── labels.csv
+    └── 20241025_val/
+        └── 20241025_val/
+            ├── img1.jpg
+            ├── ...
+            └── labels.csv
 ```
 
-2. Run the script:
 
-```bash
-python paddle.py
+2. In the YAML configuration file within `trainer/config_files/`, modify the fields as necessary:
+
+```yaml
+experiment_name: '20231019_LSTM'
+train_data: 'all_data'
+valid_data: 'all_data/20231019_val'
+
+# Data processing
+select_data: '20231019_train'
+
+# Model Architecture
+FeatureExtraction: 'ResNet'
+SequenceModeling: 'BiLSTM'
+
+...
+
 ```
 
-### Training Custom Model
-
-1. Prepare dataset (see next section)
-2. Configure `trainer.py` to use the desired configurations:
+3. In `trainer/trainer.py`, configure the `configs` list to include the YAML files:
 
 ```python
 configs = [
@@ -106,42 +92,13 @@ configs = [
 ]
 ```
 
-3. Start training:
+4. Begin training:
 
 ```bash
 python trainer.py
 ```
 
-## Dataset Preparation
-
-### For PaddleOCR
-
-* Place images in specified directory structure
-* Script automatically processes all images
-
-### For EasyOCR Training
-
-Modify `easyocr_labels.py`:
-
-```python
-def process_csv(input_path, output_dir='output'):
-    # Main processing function - no changes needed here
-
-if __name__ == "__main__":
-    input_csv = r'C:\path\to\your\timestamps.csv'  # UPDATE THIS PATH
-    process_csv(input_csv)
-```
-
-Download dataset from Kaggle: [Kaggle Dataset - Datetime OCR](https://www.kaggle.com/datasets/ivannalin/data-analysis-of-datetime-based-ocr-dataset)
-
-## Configuration
-
-Place all YAML configuration files in `config_files/`:
-
-* `20231019_GRU.yaml`: GRU architecture config
-* `20231019_LSTM.yaml`: LSTM architecture config
-
-## Visualization
+## Visualisation
 
 From the corresponding directory, launch TensorBoard with:
 
@@ -151,50 +108,14 @@ tensorboard --logdir runs/
 
 Access at: `http://localhost:6006`
 
-## Directory Structure
+TensorBoard will display:
 
-```bash
-project_root/
-│
-├── config_files/               # YAML configuration files
-│   ├── delete/
-│   │   └── 20241025_GRU_ResNet quick test.yaml  # Initial test config
-│   │
-│   ├── 20231019_GRU.yaml      # GRU config for 20231019 dataset
-│   ├── 20231019_LSTM.yaml     # LSTM config for 20231019 dataset
-│   ├── 20241025_GRU.yaml      # GRU config for 20241025 dataset  
-│   ├── 20241025_LSTM.yaml     # LSTM config for 20241025 dataset
-│   ├── 20240110_GRU.yaml      # GRU config for 20240110 dataset
-│   └── 20240110_LSTM.yaml     # LSTM config for 20240110 dataset
-│
-├── all_data/                   # Main data directory
-│   ├── 20231019_train/        # Training data for 20231019
-│   │   ├── images/
-│   │   │   ├── img1.jpg
-│   │   │   └── ...
-│   │   └── labels.csv         # Format: filename,words
-│   │
-│   ├── 20231019_val/          # Validation data for 20231019  
-│   │   ├── images/
-│   │   └── labels.csv
-│   │
-│   ├── 20241025_train/        # Similar structure for other dates
-│   ├── 20241025_val/
-│   ├── 20240110_train/
-│   └── 20240110_val/
-│
-├── saved_models/               # Model checkpoints
-│   ├── 20231019_GRU_<timestamp>/
-│   │   ├── best_accuracy.pth
-│   │   ├── best_norm_ED.pth
-│   │   ├── iter_*.pth
-│   │   ├── opt.txt
-│   │   └── log_*.txt
-│   └── ... (other experiments)
-│
-└── runs/                       # TensorBoard logs (now top-level)
-    ├── 20231019_GRU_<timestamp>/
-```
+* Loss trends
+* Accuracy
+* Precision, Recall, F1-score
+* Training throughput (images/second)
+* Total training time (excluding validation)
+* Validation time per run
 
 ## Citations
 
