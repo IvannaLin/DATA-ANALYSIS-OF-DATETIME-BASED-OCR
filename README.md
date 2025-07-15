@@ -1,4 +1,4 @@
-# EASYOCR CUSTOM TRAINING ENVIRONMENT
+# Data Analysis of Datetime-based OCR
 
 ## Source Code Access
 
